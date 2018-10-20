@@ -1,0 +1,19 @@
+GET http://localhost:8080/health
+
+###
+POST http://localhost:8080/search?startTime=2015-07-01T07:00:00Z&endTime=2015-07-01T12:00:00Z
+
+    {
+      "rates": [
+        {
+          "days": "mon,tues,wed,thurs,fri",
+          "times": "0600-1800",
+          "price": 1500
+        },
+        {
+          "days": "sat,sun",
+          "times": "0600-2000",
+          "price": 2000
+        }
+      ]
+    }

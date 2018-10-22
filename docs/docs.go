@@ -27,48 +27,82 @@ var doc = `{
         },
         "version": "1.0"
     },
-    "host": "localhost",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/file/upload": {
+        "/search": {
             "post": {
-                "description": "Upload file",
+                "description": "Search for available times",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Upload file",
+                "summary": "This endpoint provides the ability to specify a time range, JSON file of rates, and get a price for that time range. ",
                 "operationId": "file.upload",
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "this is a test file",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
+                        "type": "JSON object",
+                        "description": "This is a JSON representation of a collection of rates and times",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "example": {
+                            "rates": [
+                              {
+                                "days": "mon,tues,wed,thurs,fri",
+                                "times": "0600-1800",
+                                "price": 1500
+                              },
+                              {
+                                "days": "sat,sun",
+                                "times": "0600-2000",
+                                "price": 2000
+                              }
+                            ]
+                          }
+                        }
+                    },
+                    {
+                        "description": "The start time of the requested time slot",
+                        "name": "startTime",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "example": "2015-07-01T07:00:00Z"
+                        }
+                    },
+                    {
+                        "description": "The end time of the requtested time slot ",
+                        "name": "endTime",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "example": "2015-07-01T12:00:00Z"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "type": "string"
+                            "type": "object"
                         }
                     },
                     "400": {
-                        "description": "We need ID!!",
+                        "description": "JSON input is incorrect",
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/web.APIError"
+                            "type": "string"
                         }
                     },
-                    "404": {
-                        "description": "Can not find ID",
+                    "500": {
+                        "description": "Server error",
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/web.APIError"
+                            "type": "string"
                         }
                     }
                 }
@@ -91,46 +125,6 @@ var doc = `{
                             "type": "string"
                         }
                     }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "web.APIError": {
-            "type": "object",
-            "properties": {
-                "CreatedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "ErrorCode": {
-                    "type": "integer"
-                },
-                "ErrorMessage": {
-                    "type": "string"
-                }
-            }
-        },
-        "web.Pet": {
-            "type": "object",
-            "properties": {
-                "Category": {
-                    "type": "object"
-                },
-                "ID": {
-                    "type": "integer"
-                },
-                "Name": {
-                    "type": "string"
-                },
-                "PhotoUrls": {
-                    "type": "array"
-                },
-                "Status": {
-                    "type": "string"
-                },
-                "Tags": {
-                    "type": "array"
                 }
             }
         }
